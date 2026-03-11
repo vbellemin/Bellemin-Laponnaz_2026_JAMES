@@ -35,7 +35,7 @@ The datasets of the **Observing System Simulation Experiment (OSSE)** include:
 - SSH fields reconstructed with the variational method for balanced motions (**c**) and internal tides (**f**)  
 
 <p align="center">
-  <img src="fig_OSSE_github_SEANOE.png" width="1100">
+  <img src="fig_OSSE_github_SEANOE.png" width="1000">
 </p>
 
 The complete datasets are available from the **SEANOE data repository**:
