@@ -105,11 +105,11 @@ https://doi.org/10.22541/essoar.175455107.74338212/v1
 
 ## License
 
-(Add license information here, e.g. MIT / GPL / Apache 2.0.)
+CC0 1.0 Universal
 
 ---
 
 ## Contact
 
-For questions regarding the code or the experiments, please open an issue on this repository.
+For questions regarding the code or the experiments, please open an issue on this repository or contact the corresponding author **Emmanuel Cosme**.
 
