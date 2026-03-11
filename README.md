@@ -67,7 +67,7 @@ The complete dataset is available from the **SEANOE data repository**:
    \
    \
    ```pyinterp``` provides tools for interpolating geo-referenced data used in this repository. \
-   ⚠️ Installation can be very long due to several dependencies (up to 2 hours). 
+   ⚠️ Installation can be very long due to several dependencies (up to 2 hours). ⚠️
    ```bash
    conda install -c conda-forge pyinterp
    ```
