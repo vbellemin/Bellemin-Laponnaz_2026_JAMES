@@ -28,9 +28,7 @@ The method is implemented and performances are evaluated within an **Observing S
 
 ## Data
 
-The datasets used in the **Observing System Simulation Experiment (OSSE)** are **not stored in this repository**.
-
-They include:
+The datasets of the **Observing System Simulation Experiment (OSSE)** include:
 
 - simulated satellite observations (**a**) 
 - target reference SSH fields for balanced motions (**b**) and internal tides (**e**)  
@@ -40,7 +38,7 @@ They include:
   <img src="fig_OSSE_github_SEANOE.png" width="1100">
 </p>
 
-The complete dataset is available from the **SEANOE data repository**:
+The complete datasets are available from the **SEANOE data repository**:
 
 **Observing System Simulation Experiment (OSSE) around Hawai‘i for Sea Surface Height (SSH) reconstruction and separation of balanced motions and internal tides from Nadir and SWOT Altimeters.**
 
