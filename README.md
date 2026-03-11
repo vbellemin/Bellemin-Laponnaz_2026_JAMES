@@ -47,6 +47,39 @@ The complete dataset is available from the **SEANOE data repository**:
 
 ---
 
+## Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/vbellemin/Bellemin-Laponnaz_2026_JAMES.git
+   cd Bellemin-Laponnaz_2026_JAMES
+   ```
+
+2. **Create a new environment**
+   ```bash
+   conda create -n new_env python=3.10
+   ```
+   ```bash
+   conda activate new_env
+   ```
+
+3. **Install ```pyinterp``` with conda-forge** 
+   \
+   \
+   ```pyinterp``` provides tools for interpolating geo-referenced data used in this repository. \
+   ⚠️ Installation can be very long due to several dependencies (up to 2 hours). 
+   ```bash
+   conda install -c conda-forge pyinterp
+   ```
+   
+3. **Install other dependencies with pip** 
+   ```bash
+   pip install --upgrade pip setuptools wheel
+   pip install -e .
+   ```
+
+---
+
 ## Reproducibility
 
 To reproduce the experiments described in the paper:
@@ -80,33 +113,3 @@ https://doi.org/10.22541/essoar.175455107.74338212/v1
 
 For questions regarding the code or the experiments, please open an issue on this repository.
 
-## Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/vbellemin/Bellemin-Laponnaz_2026_JAMES.git
-   cd Bellemin-Laponnaz_2026_JAMES
-   ```
-
-2. **Create a new environment**
-   ```bash
-   conda create -n new_env python=3.10
-   ```
-   ```bash
-   conda activate new_env
-   ```
-
-3. **Install ```pyinterp``` with conda-forge** 
-   \
-   \
-   ```pyinterp``` provides tools for interpolating geo-referenced data used in this repository. \
-   ⚠️ Installation can be very long due to several dependencies (up to 2 hours). 
-   ```bash
-   conda install -c conda-forge pyinterp
-   ```
-   
-3. **Install other dependencies with pip** 
-   ```bash
-   pip install --upgrade pip setuptools wheel
-   pip install -e .
-   ```
