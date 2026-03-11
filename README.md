@@ -37,7 +37,7 @@ They include:
 - reconstructed SSH fields  
 
 <p align="center">
-  <img src="fig_OSSE_github_SEANOE.png" width="600">
+  <img src="fig_OSSE_github_SEANOE.png" width="1100">
 </p>
 
 The complete dataset is available from the **SEANOE data repository**:
