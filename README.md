@@ -22,7 +22,7 @@ The implemented method is a **variational data assimilation framework** designed
 - **balanced motions**
 - **internal tides**
 
-The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from **MITgcm LLC4320** simulation, over a region located around **Hawai'i**. 
+The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from **MITgcm LLC4320** simulation ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/)), over a region located around **Hawai'i**. 
 
 ---
 
