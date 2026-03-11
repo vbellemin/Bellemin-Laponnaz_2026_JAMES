@@ -2,13 +2,13 @@
 
 Sources for the paper Valentin Bellemin-Laponnaz, et al. A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations. *ESS Open Archive*, 2025, submitted to the Journal of Advances in Modeling Earth Systems (JAMES). 
 
-DOI: 10.22541/essoar.175455107.74338212/v1
+DOI: https://doi.org/10.22541/essoar.175455107.74338212/v1
 URL: https://essopenarchive.org/doi/full/10.22541/essoar.175455107.74338212
 
 This repository can be used to reproduce the mapping experiments and the performance analyzes presented the manuscript.
 
 The datasets of the OSSE experiment (satellite observations, reference SSH fields), as well as the SSH reconstructed fields can be found on the dedicated SEANOE repository: Observing System Simulation Experiment (OSSE) around Hawai‘i for Sea Surface Height (SSH) reconstruction and separation of balanced motions and internal tides from Nadir and SWOT Altimeters. *SEANOE*, 2025. 
 
-DOI: 10.17882/107806
+DOI: https://doi.org/10.17882/107806
 URL: https://www.seanoe.org/data/00966/107806/
 
