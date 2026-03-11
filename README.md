@@ -36,6 +36,10 @@ They include:
 - reference SSH fields  
 - reconstructed SSH fields  
 
+<p align="center">
+  <img src="fig_OSSE_github_SEANOE.png" width="600">
+</p>
+
 The complete dataset is available from the **SEANOE data repository**:
 
 **Observing System Simulation Experiment (OSSE) around Hawai‘i for Sea Surface Height (SSH) reconstruction and separation of balanced motions and internal tides from Nadir and SWOT Altimeters.**
