@@ -17,12 +17,12 @@ Preprint available on **ESS Open Archive**.
 
 This repository provides the code required to reproduce the **mapping experiments** and **performance analyses** presented in the manuscript.
 
-The implemented method is a **variational data assimilation framework** designed to reconstruct sea surface height (SSH) fields from altimetry measurements from SWOT and Nadir satellites, while separating:
+The implemented method is a **variational data assimilation framework** designed to reconstruct sea surface height (SSH) fields from altimetry measurements from **SWOT** and **Nadir** satellites, while separating:
 
 - **balanced motions**
 - **internal tides**
 
-The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from MITgcm LLC4320 simulation, over a region located around Hawai'i. 
+The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from **MITgcm LLC4320** simulation, over a region located around **Hawai'i**. 
 
 ---
 
