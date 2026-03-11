@@ -32,9 +32,9 @@ The datasets used in the **Observing System Simulation Experiment (OSSE)** are *
 
 They include:
 
-- simulated satellite observations  
-- reference SSH fields  
-- reconstructed SSH fields  
+- simulated satellite observations (**a**) 
+- target reference SSH fields for balanced motions (**b**) and internal tides (**e**)  
+- SSH fields reconstructed with the variational method for balanced motions (**c**) and internal tides (**f**)  
 
 <p align="center">
   <img src="fig_OSSE_github_SEANOE.png" width="1100">
