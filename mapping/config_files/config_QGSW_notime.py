@@ -58,7 +58,7 @@ EXP = dict(
 
     smooth_wavelength = 36000, # wavelength for the smoothing of bathymetry (in meters), if None no smoothing is applied 
 
-    path_tidal_velocity = "/bettik/bellemva/FES_tide",
+    path_tidal_velocity = "../aux/FES_tide",
 
     coriolis_force = True, # if set to False, coriolis force is set to 0 (for idealized case for instance)
 
