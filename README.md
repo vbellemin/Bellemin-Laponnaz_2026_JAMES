@@ -15,14 +15,14 @@ Preprint available on **ESS Open Archive**.
 
 ## Overview
 
-This repository provides the code required to reproduce the **mapping experiments** and **performance analyses** presented in the manuscript.
-
 The implemented method is a **variational data assimilation framework** designed to reconstruct sea surface height (SSH) fields from altimetry measurements from **SWOT** and **Nadir** satellites, while separating:
 
 - **balanced motions**
 - **internal tides**
 
 The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from **MITgcm LLC4320** simulation ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/)), over a region located around **Hawai'i**. 
+
+This repository provides the code required to create the **OSSE experiment** (`./OSSE/`), reproduce the **mapping experiments** (`./mapping/`) and compute the **performance analyses** (`./analysis/`) presented in the manuscript.
 
 ---
 
