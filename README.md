@@ -16,19 +16,20 @@ URL: https://www.seanoe.org/data/00966/107806/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/datlas-ocean/VarDyn.git
-   cd VarDyn
+   git clone https://github.com/vbellemin/Bellemin-Laponnaz_2026_JAMES.git
+   cd Bellemin-Laponnaz_2026_JAMES
    ```
 
 2. **Create a new environment**
    ```bash
-   conda create -n env_vardyn python=3.10
+   conda create -n new_env python=3.10
    ```
    ```bash
-   conda activate env_vardyn
+   conda activate new_env
    ```
 
 3. **Install ```pyinterp``` with conda-forge** (very long, up to 2 hours)
+   ```pyinterp``` provides tools for interpolating geo-referenced data used in this repository.
    ```bash
    conda install -c conda-forge pyinterp
    ```
