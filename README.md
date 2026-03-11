@@ -26,7 +26,7 @@ The method is implemented and performances are evaluated within an **Observing S
 
 ---
 
-## Data
+## OSSE Data
 
 The datasets of the **Observing System Simulation Experiment (OSSE)** include:
 
