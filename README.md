@@ -1,16 +1,84 @@
-# A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations
+# A Variational Method for Reconstructing and Separating Balanced Motions and Internal Tides from Wide-Swath Altimetric Sea Surface Height Observations
 
-Sources for the paper Valentin Bellemin-Laponnaz, et al. A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations. *ESS Open Archive*, 2025, submitted to the Journal of Advances in Modeling Earth Systems (JAMES). 
+This repository contains the code used in:
 
-DOI: https://doi.org/10.22541/essoar.175455107.74338212/v1
-URL: https://essopenarchive.org/doi/full/10.22541/essoar.175455107.74338212
+**Bellemin-Laponnaz, V., et al. (2025)**  
+*A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations.*  
+Submitted to *Journal of Advances in Modeling Earth Systems (JAMES)*.
 
-This repository can be used to reproduce the mapping experiments and the performance analyzes presented the manuscript.
+Preprint available on **ESS Open Archive**.
 
-The datasets of the OSSE experiment (satellite observations, reference SSH fields), as well as the SSH reconstructed fields can be found on the dedicated SEANOE repository: Observing System Simulation Experiment (OSSE) around Hawai‘i for Sea Surface Height (SSH) reconstruction and separation of balanced motions and internal tides from Nadir and SWOT Altimeters. *SEANOE*, 2025. 
+**DOI:** https://doi.org/10.22541/essoar.175455107.74338212/v1  
+**URL:** https://essopenarchive.org/doi/full/10.22541/essoar.175455107.74338212
 
-DOI: https://doi.org/10.17882/107806
-URL: https://www.seanoe.org/data/00966/107806/
+---
+
+## Overview
+
+This repository provides the code required to reproduce the **mapping experiments** and **performance analyses** presented in the manuscript.
+
+The implemented method is a **variational data assimilation framework** designed to reconstruct sea surface height (SSH) fields from altimetry measurements from SWOT and Nadir satellites, while separating:
+
+- **balanced motions**
+- **internal tides**
+
+The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using sythetic satellite observations generated from MITgcm LLC4320 simulation, over a region located around Hawai'i. 
+
+---
+
+## Data
+
+The datasets used in the **Observing System Simulation Experiment (OSSE)** are **not stored in this repository**.
+
+They include:
+
+- simulated satellite observations  
+- reference SSH fields  
+- reconstructed SSH fields  
+
+The complete dataset is available from the **SEANOE data repository**:
+
+**Observing System Simulation Experiment (OSSE) around Hawai‘i for Sea Surface Height (SSH) reconstruction and separation of balanced motions and internal tides from Nadir and SWOT Altimeters.**
+
+*SEANOE (2025)*
+
+**DOI:** https://doi.org/10.17882/107806  
+**URL:** https://www.seanoe.org/data/00966/107806/
+
+---
+
+## Reproducibility
+
+To reproduce the experiments described in the paper:
+
+1. Download the OSSE datasets from the SEANOE repository.
+2. Place the data in the appropriate directory (see `data/`).
+3. Run the experiment scripts provided in this repository.
+
+Detailed instructions are provided in the corresponding experiment folders.
+
+---
+
+## Citation
+
+If you use this repository, please cite:
+
+Bellemin-Laponnaz, V., et al. (2025).  
+*A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations.*  
+ESS Open Archive.  
+https://doi.org/10.22541/essoar.175455107.74338212/v1
+
+---
+
+## License
+
+(Add license information here, e.g. MIT / GPL / Apache 2.0.)
+
+---
+
+## Contact
+
+For questions regarding the code or the experiments, please open an issue on this repository.
 
 ## Installation
 
