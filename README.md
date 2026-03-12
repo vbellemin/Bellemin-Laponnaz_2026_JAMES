@@ -65,22 +65,26 @@ The complete datasets are available from the **SEANOE data repository**:
    conda activate new_env
    ```
 
-3. **Install ```pyinterp``` with conda-forge** 
+3. **Install `pyinterp` with conda-forge** 
    \
    \
-   ```pyinterp``` provides tools for interpolating geo-referenced data used in this repository. \
-   ⚠️ Installation can be very long due to several dependencies (up to 2 hours). ⚠️
+   `pyinterp` provides tools for interpolating geo-referenced data used in this repository. \
+   ⚠️ Installation can be very long due to several dependencies. Use of `mamba` is strongly recommended, see [Mamba instructions](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html). ⚠️
    ```bash
    conda install -c conda-forge pyinterp
    ```
+5. (OPTIONAL) **Install `jax` for GPU or TPU** 
+\
+\
+Users with access to GPUs or TPUs should first install `jax` separately in order to fully benefit from its high-performance computing capacities. See [JAX instructions](https://docs.jax.dev/en/latest/installation.html). By default, a CPU-only version of JAX will be installed if no other version is already present in the Python environment. 
    
-4. **Install other dependencies with pip** 
+6. **Install other dependencies with pip** 
    ```bash
    pip install --upgrade pip setuptools wheel
    pip install -e .
    ```
 
-5. **Download OSSE data on SEANOE** (require ~15 GB of disk space)
+7. **Download OSSE data on SEANOE** (require ~15 GB of disk space)
    ```bash
    ./download_data.sh
    ```
