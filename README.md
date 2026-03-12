@@ -80,10 +80,7 @@ The complete datasets are available from the **SEANOE data repository**:
    pip install -e .
    ```
 
-5. **Download OSSE data on SEANOE** 
-   \
-   \
-   All datasets require ~15 GB of disk space. 
+5. **Download OSSE data on SEANOE** (require ~15 GB of disk space)
    ```bash
    ./download_data.sh
    ```
