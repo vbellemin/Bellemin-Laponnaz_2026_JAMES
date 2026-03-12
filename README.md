@@ -74,10 +74,18 @@ The complete datasets are available from the **SEANOE data repository**:
    conda install -c conda-forge pyinterp
    ```
    
-3. **Install other dependencies with pip** 
+4. **Install other dependencies with pip** 
    ```bash
    pip install --upgrade pip setuptools wheel
    pip install -e .
+   ```
+
+5. **Download OSSE data on SEANOE** 
+   \
+   \
+   All datasets require ~15 GB of disk space. 
+   ```bash
+   ./download_data.sh
    ```
 
 ---
