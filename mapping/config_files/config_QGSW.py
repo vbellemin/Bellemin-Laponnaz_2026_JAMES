@@ -52,14 +52,6 @@ EXP = dict(
 
     path_obs = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obs/final_experiment_hawaii_itg/{name_experiment}", # if set to None, observations are saved in *tmp_DA_path*
 
-    path_bathymetry = f"../aux/Bathymetry_hawaii.nc", # path to read bathymetry netcdf file.   
-
-    name_var_bathy = {'lon':'lon','lat':'lat','var':'elevation'},
-
-    smooth_wavelength = 36000, # wavelength for the smoothing of bathymetry (in meters), if None no smoothing is applied 
-
-    path_tidal_velocity = "../aux/FES_tide",
-
     coriolis_force = True, # if set to False, coriolis force is set to 0 (for idealized case for instance)
 
     n_workers = 10 # number of workers to parallelize experiment preparation (like Obsop, ...)
@@ -97,10 +89,7 @@ myGRID = dict(
 #################################################################################################################################
 # Model parameters
 #################################################################################################################################
-
 NAME_MOD = ['myMOD_QG','myMOD_SW']
-# NAME_MOD ='myMOD_SW'
-
 
 myMOD_QG = dict(
 
@@ -124,7 +113,7 @@ myMOD_SW = dict(
 
     name_var = {'U':'u_it', 'V':'v_it', 'SSH':'ssh_it'},
 
-    name_params = ['He','He_offset','itg','hbcx','hbcy'],
+    name_params = {'HE':'He', 'HE_OFFSET':'He_offset', 'HBCX':'hbcx','HBCY':'hbcy','ITG':'itg'},
 
     var_to_save = ['SSH'],
 
@@ -144,7 +133,15 @@ myMOD_SW = dict(
 
     Ntheta = 2, # Number of angles (computed from the normal of the border) of incoming waves,
 
-    g = 9.81
+    g = 9.81,
+
+    path_bathymetry = f"../aux/Bathymetry_hawaii.nc", # path to read bathymetry netcdf file.  
+       
+    name_var_bathy = {'lon':'lon','lat':'lat','var':'elevation'},
+
+    smooth_wavelength = 36000, # wavelength for the smoothing of bathymetry (in meters), if None no smoothing is applied 
+
+    path_tidal_velocity = f"../aux/FES_tide/",
 
 )
 
@@ -170,14 +167,11 @@ myBC = dict(
 #################################################################################################################################
 # OBSERVATIONAL OPERATORS
 #################################################################################################################################
-
 NAME_OBSOP = ["myOBSOP_Nadirs", "myOBSOP_SWOT"]
-
-# NAME_OBSOP = "myOBSOP_Nadirs"
 
 myOBSOP_Nadirs = dict(
 
-    super = 'OBSOP_INTERP_L3',
+    super = 'OBSOP_INTERP_L3_JAX',
 
     path_save = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obsop/long_serie/{name_experiment}/obsop_nadirs", # Directory where to save observational operator
 
@@ -218,11 +212,7 @@ myOBSOP_SWOT = dict(
 #################################################################################################################################
 # REDUCED BASIS 
 #################################################################################################################################
-
 NAME_BASIS = ['myBASIS_BM','myBASIS_He','myBASIS_He_offset','myBASIS_HBC','myBASIS_ITG']
-# NAME_BASIS = ['myBASIS_BM','myBASIS_He_offset','myBASIS_HBC','myBASIS_ITG']
-# NAME_BASIS = ['myBASIS_BM_He','myBASIS_He_offset','myBASIS_HBC','myBASIS_ITG']
-# NAME_BASIS = ['myBASIS_BM']
 
 myBASIS_BM = dict(
 
@@ -336,7 +326,6 @@ myBASIS_ITG = dict(
 
 )
 
-
 #################################################################################################################################
 # Analysis parameters
 #################################################################################################################################
@@ -351,8 +340,6 @@ myINV = dict(
     path_init_4Dvar = None,#"/silenus/PROJECTS/pr-data-ocean/bellemva/scratch/final_experiment_hawaii_itg/config_QGSW/X_it-2025-03-10_102207.nc",
 
     restart_4Dvar = False, 
-
-    # gtol = 1e-3, # Gradient norm must be less than gtol before successful termination.
 
     ftol = 1e-3, # Cost function value norm must be less than ftol before successful termination.
 

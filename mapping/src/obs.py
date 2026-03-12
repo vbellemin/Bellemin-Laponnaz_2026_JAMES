@@ -100,7 +100,7 @@ def Obs(config, State, *args, **kwargs):
             # dropping unused variables
             drop_variables=[
                 v for v in xr.open_dataset(OBS.path).data_vars
-                if v not in list(OBS.name_var.values())
+                if v not in list(OBS.name_var.values()) and v != OBS.name_time
             ]
             if OBS.quality_flag_variable is not None:
                 drop_variables.remove(OBS.quality_flag_variable)
@@ -123,7 +123,7 @@ def Obs(config, State, *args, **kwargs):
                 # dropping unused variables
                 drop_variables=[
                     v for v in xr.open_dataset(OBS.path[0]).data_vars
-                    if v not in list(OBS.name_var.values())
+                    if v not in list(OBS.name_var.values()) and v != OBS.name_time
                 ]
                 if OBS.quality_flag_variable is not None:
                     drop_variables.remove(OBS.quality_flag_variable)
@@ -153,8 +153,9 @@ def Obs(config, State, *args, **kwargs):
                 # dropping unused variables
                 drop_variables=[
                     v for v in _ds0.data_vars
-                    if v not in list(OBS.name_var.values())
+                    if v not in list(OBS.name_var.values()) and v != OBS.name_time
                 ]
+
                 if OBS.quality_flag_variable is not None:
                     drop_variables.remove(OBS.quality_flag_variable)
 

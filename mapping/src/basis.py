@@ -52,7 +52,7 @@ def Basis(config, State, verbose=True, *args, **kwargs):
         if verbose:
             print(config.BASIS)
 
-        elif config.BASIS.super=='BASIS_GAUSS3D':
+        if config.BASIS.super=='BASIS_GAUSS3D':
             return Basis_gauss3d(config,State)
 
         elif config.BASIS.super=='BASIS_GAUSS3D_JAX':

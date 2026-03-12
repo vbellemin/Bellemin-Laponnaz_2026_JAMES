@@ -48,7 +48,7 @@ EXP = dict(
 
     write_obs = True, # save observation dictionary in *path_obs*
 
-    compute_obs = True, # force computing observations 
+    compute_obs = False, # force computing observations 
 
     path_obs = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obs/final_experiment_hawaii_itg/config_QGSW", # if set to None, observations are saved in *tmp_DA_path*
 
@@ -97,8 +97,6 @@ myGRID = dict(
 #################################################################################################################################
 # Model parameters
 #################################################################################################################################
-
-# NAME_MOD = ['myMOD_QG','myMOD_SW']
 NAME_MOD ='myMOD_QG'
 
 
@@ -115,36 +113,6 @@ myMOD_QG = dict(
     time_scheme = 'Euler',
 
     c0 = 2.7,
-
-)
-
-myMOD_SW = dict(
-
-    super = 'MOD_SW1L_JAX',
-
-    name_var = {'U':'u_it', 'V':'v_it', 'SSH':'ssh_it'},
-
-    name_params = ['He','He_offset','itg','hbcx','hbcy'],
-
-    var_to_save = ['SSH'],
-
-    dtmodel = 300, # model timestep
-
-    time_scheme = 'rk4', # Time scheme of the model (e.g. Euler,rk4)
-
-    bc_island = "dirichlet", # Either "dirichlet" (orthogonal velocity forced to zero) or "radiative" (dissipative boundaries)
-
-    bc_kind = '1d', # Either 1d or 2d
-
-    w_waves = [2*pi/(12.42060121*3600),2*pi/(12.*3600),2*pi/(12.65834751*3600)], # igw frequencies (in seconds)
-
-    w_names = ["m2","s2","n2"], 
-
-    He_init = 0.95, # Mean height (in m)
-
-    Ntheta = 2, # Number of angles (computed from the normal of the border) of incoming waves,
-
-    g = 9.81
 
 )
 
@@ -173,11 +141,9 @@ myBC = dict(
 
 NAME_OBSOP = ["myOBSOP_Nadirs", "myOBSOP_SWOT"]
 
-# NAME_OBSOP = "myOBSOP_Nadirs"
-
 myOBSOP_Nadirs = dict(
 
-    super = 'OBSOP_INTERP_L3',
+    super = 'OBSOP_INTERP_L3_JAX',
 
     path_save = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obsop/long_serie/config_QGSW/obsop_nadirs", # Directory where to save observational operator
 
@@ -185,7 +151,7 @@ myOBSOP_Nadirs = dict(
 
     write_op = True, # Write operator data to *path_save*
 
-    compute_op = True, # Force computing H 
+    compute_op = False, # Force computing H 
 
     Npix = 4, # Number of pixels to perform projection y=Hx
 
@@ -207,7 +173,7 @@ myOBSOP_SWOT = dict(
 
     write_op = True, # Write operator data to *path_save*
 
-    compute_op = True, # Force computing H 
+    compute_op = False, # Force computing H 
 
     mask_borders = False,
 
@@ -218,9 +184,6 @@ myOBSOP_SWOT = dict(
 #################################################################################################################################
 # REDUCED BASIS 
 #################################################################################################################################
-
-# NAME_BASIS = ['myBASIS_BM','myBASIS_BM_He','myBASIS_He_offset','myBASIS_HBC','myBASIS_ITG']
-# NAME_BASIS = ['myBASIS_BM_He','myBASIS_He_offset','myBASIS_HBC','myBASIS_ITG']
 NAME_BASIS = 'myBASIS_BM'
 
 myBASIS_BM = dict(
@@ -256,7 +219,6 @@ myBASIS_BM = dict(
     norm_time = True
 
 )
-
 
 myBASIS_He_offset = myBASIS_OFFSET = dict(
 
@@ -310,8 +272,6 @@ myBASIS_ITG = dict(
 
 )
 
-
-
 #################################################################################################################################
 # Analysis parameters
 #################################################################################################################################
@@ -325,15 +285,13 @@ myINV = dict(
 
     path_init_4Dvar = None,#"/silenushawaii_L3_interpL4/PROJECTS/pr-data-ocean/bellemva/scratch/hawaii_L3/X_it-2024-04-05_085407.nc",
 
-    restart_4Dvar = True, 
-
-    # gtol = 1e-3, # Gradient norm must be less than gtol before successful termination.
+    restart_4Dvar = False, 
 
     ftol = 1e-3, # Cost function value norm must be less than ftol before successful termination.
 
     n_consecutive = 100, # Number of consecutive iterations over which ftol should be fulfilled
 
-    maxiter = 0, # Maximal number of iterations for the minimization process
+    maxiter = 100, # Maximal number of iterations for the minimization process
 
     opt_method = 'L-BFGS-B', # method for scipy.optimize.minimize
 

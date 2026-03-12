@@ -28,7 +28,6 @@ from copy import deepcopy
 from functools import partial
 
 from . import  grid
-from . import switchvar
 
 from .exp import Config as Config
 
@@ -982,6 +981,8 @@ class Model_sw1l_jax(M):
 
         # Read tidal velocities
         if config.MOD.path_tidal_velocity is not None and os.path.exists(config.MOD.path_tidal_velocity): 
+
+            
             
             # Variables
             
