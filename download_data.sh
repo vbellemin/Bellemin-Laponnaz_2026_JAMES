@@ -62,6 +62,8 @@ process_tar "https://www.seanoe.org/data/00966/107806/data/121203.tar" "./data/O
 
 process_tar "https://www.seanoe.org/data/00966/107806/data/121238.tar" "./data/OSSE/ref"
 
+process_tar "https://www.seanoe.org/data/00966/107806/data/127069.tar" "./data/OSSE/lowpass_ref_bm"
+
 echo ""
 echo "----------------------------------------"
 echo "All downloads and extractions completed!"

@@ -26,9 +26,9 @@ EXP = dict(
 
     name_exp_save = name_experiment, # name of output files
 
-    path_save = f"/bettik/bellemva/MASSH_outputs/final_experiment_hawaii_itg/{name_experiment}", # path of output files
+    path_save = f"../../data/mapping_outputs/{name_experiment}", # path of output files
 
-    tmp_DA_path = f"/silenus/PROJECTS/pr-data-ocean/bellemva/scratch/final_experiment_hawaii_itg/{name_experiment}", # temporary data assimilation directory path
+    tmp_DA_path = f"../../tmp/DA/{name_experiment}", # temporary data assimilation directory path
 
     flag_plot = 0, # between 0 and 4. 0 for none plot, 4 for full plot
 
@@ -50,15 +50,7 @@ EXP = dict(
 
     compute_obs = False, # force computing observations 
 
-    path_obs = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obs/final_experiment_hawaii_itg/config_QGSW", # if set to None, observations are saved in *tmp_DA_path*
-
-    path_bathymetry = f"../aux/Bathymetry_hawaii.nc", # path to read bathymetry netcdf file.   
-
-    name_var_bathy = {'lon':'lon','lat':'lat','var':'elevation'},
-
-    smooth_wavelength = 36000, # wavelength for the smoothing of bathymetry (in meters), if None no smoothing is applied 
-
-    path_tidal_velocity = "../aux/FES_tide",
+    path_obs = f"../../tmp/obs/", # if set to None, observations are saved in *tmp_DA_path*
 
     coriolis_force = True, # if set to False, coriolis force is set to 0 (for idealized case for instance)
 
@@ -88,7 +80,7 @@ myGRID = dict(
 
     dlat = 1/16,
 
-    name_init_mask = None, #"/data1/nobackup/bellemva/MITgcm_it/hawaii/MITgcm_it_20120601.nc",
+    name_init_mask = None, 
 
     name_var_mask = {'lon':'longitude','lat':'latitude','var':'ssh_it1'}
 
@@ -125,7 +117,7 @@ myBC = dict(
 
     super = 'BC_EXT',
 
-    file = '/bettik/bellemva/miost/miost_hawaii/miost_like_ssh_coarse/*.nc', # netcdf file(s) in whihch the boundary conditions fields are stored
+    file = '../../data/OSSE/lowpass_ref_bm/*.nc', # netcdf file(s) in whihch the boundary conditions fields are stored
 
     name_lon = 'longitude',
 
@@ -138,14 +130,13 @@ myBC = dict(
 #################################################################################################################################
 # OBSERVATIONAL OPERATORS
 #################################################################################################################################
-
 NAME_OBSOP = ["myOBSOP_Nadirs", "myOBSOP_SWOT"]
 
 myOBSOP_Nadirs = dict(
 
     super = 'OBSOP_INTERP_L3_JAX',
 
-    path_save = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obsop/long_serie/config_QGSW/obsop_nadirs", # Directory where to save observational operator
+    path_save = f"../../tmp/obsop/obsop_nadirs", # Directory where to save observational operator
 
     name_obs = ['ALG','C2','J3','S3A','S3B','SWOT_NADIR'],
 
@@ -167,7 +158,7 @@ myOBSOP_SWOT = dict(
 
     super = 'OBSOP_INTERP_L4',
 
-    path_save = f"/silenus/PROJECTS/pr-data-ocean/bellemva/obsop/long_serie/config_QGSW/obsop_swot", # Directory where to save observational operator
+    path_save = f"../../tmp/obsop/obsop_swot", # Directory where to save observational operator
 
     name_obs = ['SWOT'],
 
@@ -202,7 +193,7 @@ myBASIS_BM = dict(
 
     facpsp = 1.5, # factor to fix df between wavelets
 
-    file_aux = '/home/bellemva/MASSH/mapping/aux/aux_reduced_basis_BM.nc', # Name of auxilliary file in which are stored the std and tdec for each locations at different wavelengths.
+    file_aux = f"../aux/aux_reduced_basis_BM.nc", # Name of auxilliary file in which are stored the std and tdec for each locations at different wavelengths.
 
     lmin = 80, # minimal wavelength (in km)
 
@@ -283,7 +274,7 @@ myINV = dict(
 
     compute_test = False, # TLM, ADJ & GRAD tests
 
-    path_init_4Dvar = None,#"/silenushawaii_L3_interpL4/PROJECTS/pr-data-ocean/bellemva/scratch/hawaii_L3/X_it-2024-04-05_085407.nc",
+    path_init_4Dvar = None,
 
     restart_4Dvar = False, 
 
@@ -315,7 +306,7 @@ SWOT = dict(
 
     super = 'OBS_SSH_SWATH',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_swot/SSH_SWOT_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_swot/SSH_SWOT_2012-0*.nc',
 
     name_time = 'time',
     
@@ -337,7 +328,7 @@ ALG = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/alg/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/alg/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -357,7 +348,7 @@ C2 = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/c2/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/c2/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -377,7 +368,7 @@ J3 = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/j3/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/j3/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -397,7 +388,7 @@ S3A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/s3a/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/s3a/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -417,7 +408,7 @@ S3B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/s3b/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/s3b/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -437,7 +428,7 @@ SWOT_NADIR = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '/bettik/bellemva/ocean_data_challenge/2023e_SSHmapping_HF_Hawaii/dc_obs_nadirs/swot/SSH_NADIR_2012-0*.nc',
+    path = '../../data/OSSE/obs/dc_obs_nadirs/swot/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
