@@ -109,7 +109,7 @@ Successive spatial and temporal filtering operations are performed to isolate th
 
 The notebooks used to perform the filtering operations are listed below. All notebooks are located in the `./OSSE_generator/` directory.
 
-* `extract_bm.ipynb` — Applies a temporal low-pass filter to the total SSH to extract the **balanced motions** (<span style="color:red">reference field</span>).
+* `extract_bm.ipynb` — Applies a temporal low-pass filter to the ground-truth total SSH to extract the **balanced motions** (<span style="color:red">reference field</span>).
 * `extract_bar.ipynb` — Applies a spatial low-pass filter to the high-frequency SSH to extract the **barotropic tide** (used for correction).
 * `extract_it.ipynb` — Applies a temporal band-pass filter to the internal gravity wave field to extract the **semi-diurnal total internal tide**.
 * `extract_modes.ipynb` — Applies a spatial band-pass filter to the semi-diurnal internal tide field to isolate the **mode-1 semi-diurnal internal tides** (<span style="color:red">reference field</span>).
