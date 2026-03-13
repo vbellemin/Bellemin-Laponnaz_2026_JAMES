@@ -107,7 +107,7 @@ Successive spatial and temporal filtering operations are performed to isolate th
   <img src="./figures/Figure_filtering_github.001.png" width="1000">
 </p>
 <p align="center">
-<b>Figure.</b> Scheme of successive filters applied to the total ground-truth SSH fields.
+<b>Figure: </b> Scheme of successive filters applied to the total ground-truth SSH fields.
 </p>
 
 The notebooks used to perform the filtering operations are listed below. All notebooks are located in the `./OSSE_generator/` directory.
