@@ -95,11 +95,9 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
 
 To reproduce the experiments described in the paper:
 
-1. Download the OSSE datasets from the SEANOE repository.
-2. Place the data in the appropriate directory (see `data/`).
-3. Run the experiment scripts provided in this repository.
-
-Detailed instructions are provided in the corresponding experiment folders.
+<p align="center">
+  <img src="./figures/Figure_filtering_github.001.png" width="900">
+</p>
 
 ---
 
