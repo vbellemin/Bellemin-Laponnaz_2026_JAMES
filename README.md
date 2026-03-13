@@ -95,6 +95,26 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
 
 To reproduce the experiments described in the paper:
 
+### Generation of the OSSE
+
+The OSSE is built upon the high-resolution global ocean simulation **MITgcm LLC4320** ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/)), which serves as the ground truth for sea surface height (SSH).
+
+The model fields were first interpolated from the native grid to a regular longitude–latitude grid. The **Dynamical Atmospheric Correction** ([DOI](https://doi.org/10.24400/527896/a01-2022.001)) was then applied to account for atmospheric effects.
+
+A sequence of spatial and temporal filtering operations was performed to isolate the different dynamical contributions to SSH. The resulting components include the two reference fields for **balanced motions** and **internal tides**, highlighted in <span style="color:red">red</span> in the figure below.
+
+<p align="center">
+  <img src="./figures/Figure_filtering_github.001.png" width="1000">
+</p>
+
+The notebooks used to perform the filtering operations are listed below. All notebooks are located in the `./OSSE_generator/` directory.
+
+* `extract_bm.ipynb` — Applies a temporal low-pass filter to the total SSH to extract the **balanced motions** (<span style="color:red">reference field</span>).
+* `extract_bar.ipynb` — Applies a spatial low-pass filter to the high-frequency SSH to extract the **barotropic tide** (used for correction).
+* `extract_it.ipynb` — Applies a temporal band-pass filter to the internal gravity wave field to extract the **semi-diurnal total internal tide**.
+* `extract_modes.ipynb` — Applies a spatial band-pass filter to the semi-diurnal internal tide field to isolate the **mode-1 semi-diurnal internal tides** (<span style="color:red">reference field</span>).
+
+
 ### Generation of the OSSE 
 
 The is built upon the high-resolution global ocean simulation MITgcm LLC4320 ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/))
