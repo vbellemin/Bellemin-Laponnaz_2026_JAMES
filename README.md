@@ -101,7 +101,7 @@ The OSSE is built upon the high-resolution global ocean simulation **MITgcm LLC4
 
 The model fields were first interpolated from the native grid to a regular longitude–latitude grid. The **Dynamical Atmospheric Correction** ([DOI](https://doi.org/10.24400/527896/a01-2022.001)) was then applied to account for atmospheric effects.
 
-Successive spatial and temporal filtering operations are performed to isolate the different dynamical contributions to SSH. These operations target the two reference fields for **balanced motions** and **internal tides**, highlighted in <span style="color:red">red</span> in the figure below, as well as the barotropic tide used for correction in the ground-truth SSH.
+Successive spatial and temporal filtering operations are performed to isolate the different dynamical contributions to SSH. These operations isolate the two reference fields for **balanced motions** and **internal tides**, highlighted in **red** in the figure below, as well as the barotropic tide used to correct the ground-truth SSH.
 
 <p align="center">
   <img src="./figures/Figure_filtering_github.001.png" width="1000">
