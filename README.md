@@ -22,7 +22,7 @@ The implemented method is a **variational data assimilation framework** designed
 
 The method is implemented and performances are evaluated within an **Observing System Simulation Experiment (OSSE)**, using synthetic satellite observations generated from **MITgcm LLC4320** simulation ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/)), over a region located around **Hawai'i**. 
 
-This repository provides the code required to create the **OSSE experiment** (`./OSSE/`), reproduce the **SSH reconstruction experiments** (`./mapping/`) and compute the **performance analyses** (`./analysis/`) presented in the manuscript.
+This repository provides the code required to create the **OSSE experiment** (`./OSSE_generator/`), reproduce the **SSH reconstruction experiments** (`./mapping/`) and compute the **performance analyses** (`./analysis/`) presented in the manuscript.
 
 ---
 
