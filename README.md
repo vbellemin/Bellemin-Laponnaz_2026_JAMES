@@ -101,7 +101,7 @@ The OSSE is built upon the high-resolution global ocean simulation **MITgcm LLC4
 
 The model fields were first interpolated from the native grid to a regular longitude–latitude grid. The **Dynamical Atmospheric Correction** ([DOI](https://doi.org/10.24400/527896/a01-2022.001)) was then applied to account for atmospheric effects.
 
-A sequence of spatial and temporal filtering operations was performed to isolate the different dynamical contributions to SSH. The resulting components include the two reference fields for **balanced motions** and **internal tides**, highlighted in <span style="color:red">red</span> in the figure below.
+Successive spatial and temporal filtering operations are performed to isolate the different dynamical contributions to SSH. These operations target the two reference fields for **balanced motions** and **internal tides**, highlighted in <span style="color:red">red</span> in the figure below, as well as the barotropic tide used for correction in the ground-truth SSH.
 
 <p align="center">
   <img src="./figures/Figure_filtering_github.001.png" width="1000">
@@ -113,25 +113,6 @@ The notebooks used to perform the filtering operations are listed below. All not
 * `extract_bar.ipynb` — Applies a spatial low-pass filter to the high-frequency SSH to extract the **barotropic tide** (used for correction).
 * `extract_it.ipynb` — Applies a temporal band-pass filter to the internal gravity wave field to extract the **semi-diurnal total internal tide**.
 * `extract_modes.ipynb` — Applies a spatial band-pass filter to the semi-diurnal internal tide field to isolate the **mode-1 semi-diurnal internal tides** (<span style="color:red">reference field</span>).
-
-
-### Generation of the OSSE 
-
-The is built upon the high-resolution global ocean simulation MITgcm LLC4320 ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/))
-serving as the ground truth for SSH. Fields were previously interpolated from the native grid to a regular lon, lat grid. The Dynamical Ammospheric Correction ([DOI](https://doi.org/10.24400/527896/a01-2022.001)) was applied to correct for atmospheric effects. 
-
-The successive spatial and temporal filtering operations to isolate the different dynamical contributions to SSH, including the two reference fields for balanced motions and internal tides represented in red, are represented in the following figure:
-
-<p align="center">
-  <img src="./figures/Figure_filtering_github.001.png" width="1000">
-</p>
-
-The corresponding notebooks for the filtering operations are indicated. They are all located in the `./OSSE_generator/`directory. 
-
-- `extract_bm.ipynb`: apply a temporal lowpass filter to the total SSH the extract the balanced motions (reference).
-- `extract_bar.ipynb`: apply a spatial lowpass filter to the high-frequency SSH to extract the barotropic tide (used for correction).
-- `extract_it.ipynb`: apply a temporal bandpass filter to the internal gravity waves to extract the semi-diurnal total internal tide.
-- `extract_modes.ipynb`: apply a spatial bandpass filter to the semi-diurnal total internal tide to extract the mode-1 semi-dirunal internal tides (reference). 
 
 
 ---
