@@ -95,9 +95,24 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
 
 To reproduce the experiments described in the paper:
 
+### Generation of the OSSE 
+
+The is built upon the high-resolution global ocean simulation MITgcm LLC4320 ([dataset](https://catalog.pangeo.io/browse/master/ocean/LLC4320/))
+serving as the ground truth for SSH. Fields were previously interpolated from the native grid to a regular lon, lat grid. The Dynamical Ammospheric Correction ([DOI](https://doi.org/10.24400/527896/a01-2022.001)) was applied to correct for atmospheric effects. 
+
+The successive spatial and temporal filtering operations to isolate the different dynamical contributions to SSH, including the two reference fields for balanced motions and internal tides represented in red, are represented in the following figure:
+
 <p align="center">
   <img src="./figures/Figure_filtering_github.001.png" width="1000">
 </p>
+
+The corresponding notebooks for the filtering operations are indicated. They are all located in the `./OSSE_generator/`directory. 
+
+- `extract_bm.ipynb`: apply a temporal lowpass filter to the total SSH the extract the balanced motions (reference).
+- `extract_bar.ipynb`: apply a spatial lowpass filter to the high-frequency SSH to extract the barotropic tide (used for correction).
+- `extract_it.ipynb`: apply a temporal bandpass filter to the internal gravity waves to extract the semi-diurnal total internal tide.
+- `extract_modes.ipynb`: apply a spatial bandpass filter to the semi-diurnal total internal tide to extract the mode-1 semi-dirunal internal tides (reference). 
+
 
 ---
 
