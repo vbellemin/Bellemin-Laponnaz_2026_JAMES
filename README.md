@@ -96,7 +96,7 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
 To reproduce the experiments described in the paper:
 
 <p align="center">
-  <img src="./figures/Figure_filtering_github.001.png" width="900">
+  <img src="./figures/Figure_filtering_github.001.png" width="1000">
 </p>
 
 ---
