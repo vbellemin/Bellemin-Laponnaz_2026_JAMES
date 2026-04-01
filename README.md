@@ -86,9 +86,9 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
 
 7. **Download OSSE data on SEANOE** 
    ```bash
-   ./download_data.sh path_data
+   ./download_data.sh <path_data>
    ```
-   where `path_data`is the path where to save the data (requires ~12 GB of disk space).
+   where `<path_data>` is the directory in which the data will be saved (approximately 12 GB of disk space required).
 ---
 
 ## Reproducibility
