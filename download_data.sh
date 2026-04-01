@@ -6,6 +6,8 @@
 
 set -e  # stop script if any command fails
 
+BASE_DIR=${1:-.}
+
 echo "----------------------------------------"
 echo "Starting dataset download and extraction"
 echo "----------------------------------------"
@@ -31,11 +33,7 @@ process_tar () {
 
     # Download file
     echo "Downloading archive..."
-    wget -c "$URL"
-
-    # Move file to destination
-    echo "Moving archive to destination folder..."
-    mv "$FILE" "$DEST/"
+    wget -c -P "$DEST" "$URL"
 
     # Extract archive
     echo "Extracting archive..."
@@ -52,17 +50,17 @@ process_tar () {
 # Process each dataset
 # ==========================================================
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/121201.tar" "./data/mapping_outputs/config_QGSW"
+process_tar "https://www.seanoe.org/data/00966/107806/data/121201.tar" "$BASE_DIR/data/mapping_outputs/config_QGSW"
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/121202.tar" "./data/mapping_outputs/config_QG"
+process_tar "https://www.seanoe.org/data/00966/107806/data/121202.tar" "$BASE_DIR/data/mapping_outputs/config_QG"
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/121204.tar" "./data/mapping_outputs/config_QGSW_notime"
+process_tar "https://www.seanoe.org/data/00966/107806/data/121204.tar" "$BASE_DIR/data/mapping_outputs/config_QGSW_notime"
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/121203.tar" "./data/OSSE/obs"
+process_tar "https://www.seanoe.org/data/00966/107806/data/121203.tar" "$BASE_DIR/data/OSSE/obs"
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/121238.tar" "./data/OSSE/ref"
+process_tar "https://www.seanoe.org/data/00966/107806/data/121238.tar" "$BASE_DIR/data/OSSE/ref"
 
-process_tar "https://www.seanoe.org/data/00966/107806/data/127069.tar" "./data/OSSE/lowpass_ref_bm"
+process_tar "https://www.seanoe.org/data/00966/107806/data/127069.tar" "$BASE_DIR/data/OSSE/lowpass_ref_bm"
 
 echo ""
 echo "----------------------------------------"
