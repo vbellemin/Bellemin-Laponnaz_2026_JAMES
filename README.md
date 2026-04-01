@@ -84,11 +84,11 @@ Users with access to GPUs or TPUs should first install `jax` separately in order
    pip install -e .
    ```
 
-7. **Download OSSE data on SEANOE** (requires ~12 GB of disk space)
+7. **Download OSSE data on SEANOE** 
    ```bash
-   ./download_data.sh
+   ./download_data.sh path_data
    ```
-
+   where `path_data`is the path where to save the data (requires ~12 GB of disk space).
 ---
 
 ## Reproducibility
