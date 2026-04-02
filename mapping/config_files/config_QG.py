@@ -8,6 +8,10 @@ Created on Tuesday April 2 16:46:42 2024
 
 name_experiment = 'config_QG'
 
+path_data = "../.." # Change path according to where data are saved
+path_save = "../.." # Change path where to save files (observation, observational operator, control vectors)
+
+
 #################################################################################################################################
 # Global libraries     
 #################################################################################################################################
@@ -26,9 +30,9 @@ EXP = dict(
 
     name_exp_save = name_experiment, # name of output files
 
-    path_save = f"../../data/mapping_outputs/{name_experiment}", # path of output files
+    path_save = f"{path_data}/data/mapping_outputs/{name_experiment}", # path of output files
 
-    tmp_DA_path = f"../../tmp/DA/{name_experiment}", # temporary data assimilation directory path
+    tmp_DA_path = f"{path_save}/tmp/DA/{name_experiment}", # temporary data assimilation directory path
 
     flag_plot = 0, # between 0 and 4. 0 for none plot, 4 for full plot
 
@@ -50,7 +54,7 @@ EXP = dict(
 
     compute_obs = False, # force computing observations 
 
-    path_obs = f"../../tmp/obs/", # if set to None, observations are saved in *tmp_DA_path*
+    path_obs = f"{path_save}/tmp/obs/", # if set to None, observations are saved in *tmp_DA_path*
 
     coriolis_force = True, # if set to False, coriolis force is set to 0 (for idealized case for instance)
 
@@ -117,7 +121,7 @@ myBC = dict(
 
     super = 'BC_EXT',
 
-    file = '../../data/OSSE/lowpass_ref_bm/*.nc', # netcdf file(s) in whihch the boundary conditions fields are stored
+    file = f'{path_data}/data/OSSE/lowpass_ref_bm/*.nc', # netcdf file(s) in whihch the boundary conditions fields are stored
 
     name_lon = 'longitude',
 
@@ -136,7 +140,7 @@ myOBSOP_Nadirs = dict(
 
     super = 'OBSOP_INTERP_L3_JAX',
 
-    path_save = f"../../tmp/obsop/obsop_nadirs", # Directory where to save observational operator
+    path_save = f"{path_save}/tmp/obsop/obsop_nadirs", # Directory where to save observational operator
 
     name_obs = ['ALG','C2','J3','S3A','S3B','SWOT_NADIR'],
 
@@ -158,7 +162,7 @@ myOBSOP_SWOT = dict(
 
     super = 'OBSOP_INTERP_L4',
 
-    path_save = f"../../tmp/obsop/obsop_swot", # Directory where to save observational operator
+    path_save = f"{path_save}/tmp/obsop/obsop_swot", # Directory where to save observational operator
 
     name_obs = ['SWOT'],
 
@@ -306,7 +310,7 @@ SWOT = dict(
 
     super = 'OBS_SSH_SWATH',
 
-    path = '../../data/OSSE/obs/dc_obs_swot/SSH_SWOT_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_swot/SSH_SWOT_2012-0*.nc',
 
     name_time = 'time',
     
@@ -328,7 +332,7 @@ ALG = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/alg/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/alg/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -348,7 +352,7 @@ C2 = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/c2/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/c2/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -368,7 +372,7 @@ J3 = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/j3/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/j3/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -388,7 +392,7 @@ S3A = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/s3a/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/s3a/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -408,7 +412,7 @@ S3B = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/s3b/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/s3b/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
@@ -428,7 +432,7 @@ SWOT_NADIR = dict(
 
     super = 'OBS_SSH_NADIR',
 
-    path = '../../data/OSSE/obs/dc_obs_nadirs/swot/SSH_NADIR_2012-0*.nc',
+    path = f'{path_data}/data/OSSE/obs/dc_obs_nadirs/swot/SSH_NADIR_2012-0*.nc',
 
     name_time = 'time',
     
