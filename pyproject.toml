@@ -30,6 +30,7 @@ dependencies = [
     "scipy",
     "logging",
     "xrft",
+    "xskillscore",
     "netCDF4",
     "pandas",
     "cmocean",
