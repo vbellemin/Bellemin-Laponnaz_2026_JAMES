@@ -147,7 +147,7 @@ The configuration files used in **Bellemin-Laponnaz, V., et al. (2025)** are loc
 
 The reconstruction performance is evaluated by comparing the reconstructed fields with the corresponding reference fields. The notebooks in `./analysis/` carry out these analyses. Specifically:
 
-* [fig02_07_visual_analysis.ipynb](./analysis/fig02_07_visual_analysis.ipynb) — Visual analysis of the reconstructed and reference SSH, absolute geostrophic currents, and relative vorticity fields. Generates Figures 02 and 07.
+* [`fig02_07_visual_analysis.ipynb`](./analysis/fig02_07_visual_analysis.ipynb) — Visual analysis of the reconstructed and reference SSH, absolute geostrophic currents, and relative vorticity fields. Generates Figures 02 and 07.
 
 * `fig03_05_07_spectral_analysis.ipynb` — Spectral analysis (Power Spectral Density, PSD, and associated PSD score). Generates Figures 03, 05, and 07.
 
