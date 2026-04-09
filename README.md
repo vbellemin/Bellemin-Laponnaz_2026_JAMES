@@ -1,5 +1,7 @@
 # A Variational Method for Reconstructing and Separating Balanced Motions and Internal Tides from Wide-Swath Altimetric Sea Surface Height Observations
 
+[![DOI](https://zenodo.org/badge/10.5281/zenodo.19481493.svg)](https://zenodo.org/records/10.5281/zenodo.19481493)
+
 This repository contains the code used in:
 
 **Bellemin-Laponnaz, V., et al. (2025)**  
