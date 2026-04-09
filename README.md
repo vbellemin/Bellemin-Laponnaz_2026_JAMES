@@ -145,7 +145,7 @@ The configuration files used in **Bellemin-Laponnaz, V., et al. (2025)** are loc
 
 ### Performance analyses ([`./analysis/`](./analysis))
 
-The reconstruction performance is evaluated by comparing the reconstructed fields with the corresponding reference fields. The notebooks in `./analysis/` carry out these analyses. Specifically:
+The reconstruction performance is evaluated by comparing the reconstructed fields with the corresponding reference fields. The notebooks in [`./analysis/`](./analysis) carry out these analyses. Specifically:
 
 * [`fig02_07_visual_analysis.ipynb`](./analysis/fig02_07_visual_analysis.ipynb) — Visual analysis of the reconstructed and reference SSH, absolute geostrophic currents, and relative vorticity fields. Generates Figures **02** and **07**.
 
@@ -154,8 +154,6 @@ The reconstruction performance is evaluated by comparing the reconstructed field
 * [`fig04_08_rmse_maps.ipynb`](./analysis/fig04_08_rmse_maps.ipynb) — Maps of Root Mean Square Error (RMSE). Generates Figures **04** and **08**.
 
 * [`tab_rmse.ipynb`](./analysis/tab_rmse.ipynb) — Spatially and temporally averaged RMSE for all configurations. Reported in the manuscript table.
-
-The notebook [`functions_interp.ipynb`](./analysis/functions_interp.ipynb) contains functions used to interpolate missing values (NaNs) in the reference fields.
 
 The notebook [`fig01_osse_problem.ipynb`](./analysis/fig01_osse_problem.ipynb) is used to generate the schematic figure describing the OSSE setup. Although it is not part of the performance analysis, it is included for completeness.
 
@@ -177,5 +175,5 @@ CC0 1.0 Universal
 
 ## Contact
 
-For questions regarding the code or the experiments, please open an issue on this repository or contact the corresponding author **Emmanuel Cosme**.
+For questions regarding the code or the experiments, please open an issue on this repository or contact the corresponding author [**Emmanuel Cosme**](Emmanuel.Cosme@univ-grenoble-alpes.fr).
 
