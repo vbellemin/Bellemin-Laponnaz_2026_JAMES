@@ -175,5 +175,5 @@ CC0 1.0 Universal
 
 ## Contact
 
-For questions regarding the code or the experiments, please open an issue on this repository or contact the corresponding author [**Emmanuel Cosme**](Emmanuel.Cosme@univ-grenoble-alpes.fr).
+For questions regarding the code or the experiments, please open an issue on this repository or contact the corresponding author [**Emmanuel Cosme**](mailto:Emmanuel.Cosme@univ-grenoble-alpes.fr).
 
