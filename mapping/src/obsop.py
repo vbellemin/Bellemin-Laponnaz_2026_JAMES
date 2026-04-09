@@ -8,7 +8,7 @@ Created on Tue Jul 28 14:49:01 2020
 import os,sys
 import xarray as xr 
 import numpy as np 
-from src import grid as grid
+from mapping.src import grid as grid
 import pickle
 import matplotlib.pylab as plt
 from scipy.interpolate import griddata, RegularGridInterpolator

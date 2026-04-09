@@ -3,7 +3,8 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "VarDyn"
+name = "Bellemin-Laponnaz_2026_JAMES"
+version = "0.1.0"
 authors = [
     { name = "Valentin Bellemin-Laponnaz", email = "valentin.bellemin@hotmail.fr" },
     { name = "Florian Le Guillou", email = "florian.leguillou@datlas.fr" },
@@ -21,6 +22,7 @@ classifiers = [
     "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     "Operating System :: OS Independent",
 ]
+
 dependencies = [
     "numpy",
     "jax",
@@ -38,5 +40,13 @@ dependencies = [
     "ipykernel", 
     "joblib",
     "dask", 
+    "proplot",
+    "cartopy",
+    "colorcet",
 ]
-dynamic = ["version"]
+
+[tool.setuptools.packages.find]
+where = ["."]  # list of folders that contain the packages (["."] by default)
+include = ["mapping.src*","mapping.models*"]  # package names should match these glob patterns (["*"] by default)
+exclude = ["mapping.config_files*","mapping.notebooks*","mapping.aux*"]  # exclude packages matching these glob patterns (empty by default)
+namespaces = false  # to disable scanning PEP 420 namespaces (true by default)

@@ -14,7 +14,7 @@ import xarray as xr
 import numpy as np 
 import pandas as pd 
 from datetime import timedelta
-from src import grid as grid
+from mapping.src import grid as grid
 import datetime
 import jax.numpy as jnp 
 import jax.lax as lax
