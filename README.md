@@ -1,6 +1,6 @@
 # A Variational Method for Reconstructing and Separating Balanced Motions and Internal Tides from Wide-Swath Altimetric Sea Surface Height Observations
 
-[![DOI](https://zenodo.org/badge/10.5281/zenodo.19481493.svg)](https://zenodo.org/records/10.5281/zenodo.19481493)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19481493.svg)](https://doi.org/10.5281/zenodo.19481493)
 
 This repository contains the code used in:
 
