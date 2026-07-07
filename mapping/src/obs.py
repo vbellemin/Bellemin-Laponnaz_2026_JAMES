@@ -211,11 +211,12 @@ def _obs_alti(ds, dt_list, dict_obs, obs_name, obs_attr, dt_timestep, out_path, 
     ds = ds.assign_coords({obs_attr.name_time:ds[obs_attr.name_time]})
     ds = ds.swap_dims({ds[obs_attr.name_time].dims[0]:obs_attr.name_time})
 
-    # Convert longitude
+    # Convert longitude (preserve the native dims, e.g. 2-D for swath obs)
+    lon_dims = ds[obs_attr.name_lon].dims
     if np.sign(ds[obs_attr.name_lon].data.min())==-1 and lon_unit=='0_360':
-        ds = ds.assign_coords({obs_attr.name_lon:((obs_attr.name_time, ds[obs_attr.name_lon].data % 360))})
+        ds = ds.assign_coords({obs_attr.name_lon:(lon_dims, ds[obs_attr.name_lon].data % 360)})
     elif np.sign(ds[obs_attr.name_lon].data.min())==1 and lon_unit=='-180_180':
-        ds = ds.assign_coords({obs_attr.name_lon:((obs_attr.name_time, (ds[obs_attr.name_lon].data + 180) % 360 - 180))})
+        ds = ds.assign_coords({obs_attr.name_lon:(lon_dims, (ds[obs_attr.name_lon].data + 180) % 360 - 180)})
 
     # Select sub area
     lon_obs = ds[obs_attr.name_lon] 
@@ -284,7 +285,7 @@ def _obs_alti(ds, dt_list, dict_obs, obs_name, obs_attr, dt_timestep, out_path, 
                 # Remove high values
                 if 'varmax' in obs_attr and obs_attr.varmax is not None:
                     #varobs[name][np.abs(varobs[name])>obs_attr.varmax] = np.nan
-                    varobs[name].where(np.abs(varobs[name])<obs_attr.varmax,varobs[name],np.nan)
+                    varobs[name] = varobs[name].where(np.abs(varobs[name])<obs_attr.varmax)
 
             # Build netcdf
             coords = {obs_attr.name_time:_ds[obs_attr.name_time].values}

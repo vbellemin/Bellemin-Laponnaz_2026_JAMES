@@ -46,8 +46,8 @@ class Swm:
 
         # Tidal Velocity # 
 
-        self.tidal_U = Model.tidal_U
-        self.tidal_V = Model.tidal_V
+        self.tidal_U = getattr(Model, 'tidal_U', None)
+        self.tidal_V = getattr(Model, 'tidal_V', None)
 
         ##############
         # PARAMETERS #

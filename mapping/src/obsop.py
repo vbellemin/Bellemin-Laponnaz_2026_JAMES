@@ -24,6 +24,21 @@ import jax
 jax.config.update("jax_enable_x64", True)
 
 
+def _open_obs_file(path, _retries=4, _sleep=0.5):
+    """xr.open_dataset with retry, to absorb transient HDF5/netCDF read
+    failures ('NetCDF: Not a valid ID') that can occur when many sibling
+    subprocesses read the same files from a shared filesystem.
+    """
+    import time as _time
+    last_exc = None
+    for _i in range(_retries):
+        try:
+            return xr.open_dataset(path)
+        except Exception as e:
+            last_exc = e
+            _time.sleep(_sleep * (2 ** _i))
+    raise last_exc
+
 
 def Obsop(config, State, dict_obs, Model, verbose=1, *args, **kwargs):
     """
@@ -1415,20 +1430,25 @@ class Obsop_interp_l4(Obsop_interp):
         self.DX = State.DX
         self.DY = State.DY
 
+        # Mask
+        self.mask = State.mask
+
         # Misfit on gradients
         self.gradients = config.OBSOP.gradients
         if self.gradients:
             self.name_H += f'_L4_grad_{self.name_var}_{config.OBSOP.interp_method}'
         else:
             self.name_H += f'_L4_{self.name_var}_{config.OBSOP.interp_method}'
-        
+
         self.t_obs = np.array(self.t_obs)
         self.t_obs_jax = jnp.array(self.t_obs)
 
         self._misfit_reduced_jit = jit(self._misfit_reduced)
         self._misfit_jit = jit(self._misfit)
 
-        # CORRECTION OF OBS # 
+        self.flag_plot = config.EXP.flag_plot
+
+        # CORRECTION OF OBS #
         self.file_corr = config.OBSOP.file_corr
         self.name_var_corr = config.OBSOP.name_var_corr
         self.name_coord_corr = config.OBSOP.name_coord_corr
@@ -1449,6 +1469,8 @@ class Obsop_interp_l4(Obsop_interp):
         #############################
         for i,(date,t) in enumerate(zip(self.date_obs,self.t_obs)):
 
+            print(f"Processing observations at date {date} for variable {self.name_var}...")
+
             sat_info_list = self.dict_obs[date]['attributes']
             obs_file_list = self.dict_obs[date]['obs_path']
             obs_name_list = self.dict_obs[date]['obs_name']
@@ -1466,50 +1488,73 @@ class Obsop_interp_l4(Obsop_interp):
 
                 if obs_name not in self.name_obs:
                     continue
-                
-                with xr.open_dataset(obs_file) as ncin:
 
-                    lon = ncin[sat_info['name_lon']].values
-                    lat = ncin[sat_info['name_lat']].values
+                try:
 
-                    # Check if this observation class is wanted
-                    if self.name_var not in ncin :
-                        continue
+                    with _open_obs_file(obs_file) as ncin:
 
-                    # Observed variable
-                    var = ncin[self.name_var].values
+                        lon = ncin[sat_info['name_lon']].values
+                        lat = ncin[sat_info['name_lat']].values
 
-                    if lon.size != var.size and len(lon.shape)==1: # 2D regular grid
-                        lon, lat = np.meshgrid(lon, lat)
+                        # Check if this observation class is wanted
+                        if self.name_var not in ncin :
+                            continue
 
-                    # Observed error
-                    name_err = self.name_var + '_err'
-                    if name_err in ncin:
-                        err = ncin[name_err].values
-                    elif sat_info['sigma_noise'] is not None:
-                        err = sat_info['sigma_noise'] * np.ones_like(var)
-                    else:
-                        err = np.ones_like(var)
-                    err[np.isnan(var)] = np.nan
+                        # Observed variable
+                        var = ncin[self.name_var].values
 
-                    # Add error due to interpolation (resolutions ratio)
-                    dx, dy = grid.lonlat2dxdy(lon,lat)
-                    _err_res = np.nanmean(dx * dy) / np.nanmean(self.DX * self.DY)
-                    if _err_res>1:
-                        err *= _err_res
-                                    
-                    # Append to lists
-                    var_obs.append(+var.flatten())
-                    err_obs.append(+err.flatten())
-                    lon_obs.append(+lon.flatten())
-                    lat_obs.append(+lat.flatten())
+                        if lon.size != var.size and len(lon.shape)==1: # 2D regular grid
+                            lon, lat = np.meshgrid(lon, lat)
+
+                        # Observed error
+                        name_err = self.name_var + '_err'
+                        if name_err in ncin:
+                            err = ncin[name_err].values
+                        elif sat_info['sigma_noise'] is not None:
+                            err = sat_info['sigma_noise'] * np.ones_like(var)
+                        else:
+                            err = np.ones_like(var)
+                        err[np.isnan(var)] = np.nan
+
+                        # Representativeness inflation when obs pixels are
+                        # finer than the model grid (averaging ~_err_res
+                        # independent samples per cell -> sqrt(N) reduction
+                        # cancels into a sqrt(_err_res) inflation of the
+                        # per-cell error under the i.i.d. assumption).
+                        # Skip when obs are coarser than the grid: the same
+                        # obs is reused across neighbouring cells, so the
+                        # per-cell noise stays at the sensor noise (spatial
+                        # correlation between cells is not represented here).
+                        dx, dy = grid.lonlat2dxdy(lon,lat)
+                        _err_res = np.nanmean(dx * dy) / np.nanmean(self.DX * self.DY)
+                        if _err_res>1:
+                            err *= np.sqrt(_err_res)
+
+                        # Append to lists
+                        var_obs.append(+var.flatten())
+                        err_obs.append(+err.flatten())
+                        lon_obs.append(+lon.flatten())
+                        lat_obs.append(+lat.flatten())
+                except:
+                    print(f"Warning: problem reading {obs_file}")
+                    continue
+
+            if len(var_obs)==0:
+                # remove date from list
+                print(f"Warning: no observation found at date {date} for variable {self.name_var}, skipping this date.")
+                self.date_obs.pop(i)
+                self.t_obs = np.delete(self.t_obs, i)
+                self.t_obs_jax = jnp.delete(self.t_obs_jax, i)
+                self.varobs = np.delete(self.varobs, i, axis=0)
+                self.errobs = np.delete(self.errobs, i, axis=0)
+                continue
 
             # Concatenations of lists
             var_obs = np.concatenate(var_obs)
             err_obs = np.concatenate(err_obs)
             lon_obs = np.concatenate(lon_obs)
-            lat_obs = np.concatenate(lat_obs) 
-            
+            lat_obs = np.concatenate(lat_obs)
+
             ################
             # Process L4 obs
             ################
@@ -1522,6 +1567,7 @@ class Obsop_interp_l4(Obsop_interp):
                 # Grid interpolation: performing spatial interpolation now
                 # Loop on different obs for this date and this variable name
                 _coords_obs = np.column_stack((lon_obs, lat_obs))
+
                 if self.interp_method=='hybrid':
                     # We perform first nearest, then linear, and then cubic interpolations
                     _var_obs_interp = griddata(_coords_obs, var_obs, self.coords_geo, method='nearest')
@@ -1534,20 +1580,102 @@ class Obsop_interp_l4(Obsop_interp):
                     _err_obs_interp_cubic = griddata(_coords_obs, err_obs, self.coords_geo, method='cubic')
                     _var_obs_interp[~np.isnan(_var_obs_interp_cubic)] = _var_obs_interp_linear[~np.isnan(_var_obs_interp_cubic)]
                     _err_obs_interp[~np.isnan(_err_obs_interp_cubic)] = _err_obs_interp_linear[~np.isnan(_err_obs_interp_cubic)]
+
+                elif self.interp_method == 'block_mean':
+                    # Proper L4 swath -> grid projection: assign each obs
+                    # pixel to its nearest target cell and average inside
+                    # the cell. Yields a constant value within the swath
+                    # for a constant input (e.g. flat noise field).
+                    # Cell-wise error: obs error / sqrt(N_in_cell), assuming
+                    # decorrelated per-pixel noise.
+                    _tree = KDTree(self.coords_geo)
+                    _coords_obs = np.column_stack((lon_obs, lat_obs))
+                    _valid = ~(np.isnan(lon_obs) | np.isnan(lat_obs)
+                               | np.isnan(var_obs))
+                    _, _idx = _tree.query(_coords_obs[_valid])
+                    _ncell = self.coords_geo.shape[0]
+                    _sum_var = np.bincount(_idx, weights=var_obs[_valid],
+                                           minlength=_ncell)
+                    _sum_err2 = np.bincount(_idx,
+                                            weights=err_obs[_valid] ** 2,
+                                            minlength=_ncell)
+                    _count = np.bincount(_idx, minlength=_ncell).astype(float)
+                    _empty = (_count == 0)
+                    _count_safe = np.where(_empty, 1.0, _count)
+                    # Cell-wise error: assume correlated per-pixel noise
+                    # (conservative) -> err_cell = sqrt(<err^2>) (no /sqrt(N)).
+                    _var_obs_interp = np.where(_empty, np.nan,
+                                               _sum_var / _count_safe)
+                    _err_obs_interp = np.where(
+                        _empty, np.nan,
+                        np.sqrt(_sum_err2 / _count_safe))
+
+                elif self.interp_method=='rtree':
+
+                    import pyinterp
+
+                    def _regrid_unstructured(lon_target, lat_target, lon, lat, var):
+
+                        # Spatial interpolation
+                        mesh = pyinterp.RTree()
+                        if len(lon_target.shape)==1:
+                            lon_target, lat_target = np.meshgrid(lon_target, lat_target)
+                        lons = lon.ravel()
+                        lats = lat.ravel()
+                        var_regridded = np.zeros((lat_target.shape[0],lon_target.shape[1]))
+                        data = np.array(var)
+                        mask = np.isnan(lons) | np.isnan(lats) | np.isnan(data)
+                        data = data[~mask]
+                        mesh.packing(np.vstack((lons[~mask], lats[~mask])).T, data)
+                        idw, _ = mesh.radial_basis_function(
+                            np.vstack((lon_target.ravel(), lat_target.ravel())).T,
+                            within=True,
+                            k=4,
+                            rbf='multiquadric',
+                            epsilon=None,
+                            smooth=0,
+                            num_threads=0)
+                        var_regridded[:,:] = idw.reshape(lon_target.shape)
+
+                        return var_regridded
+
+                    lon_target,lat_target = self.coords_geo.T
+                    lon_target_grid,lat_target_grid = lon_target.reshape(self.shape_grid),lat_target.reshape(self.shape_grid)
+
+                    _var_obs_interp = _regrid_unstructured(lon_target_grid,lat_target_grid,lon_obs,lat_obs,var_obs)
+                    _err_obs_interp = _regrid_unstructured(lon_target_grid,lat_target_grid,lon_obs,lat_obs,err_obs)
+
                 else:
                     _var_obs_interp = griddata(_coords_obs, var_obs, self.coords_geo, method=self.interp_method)
                     _err_obs_interp = griddata(_coords_obs, err_obs, self.coords_geo, method=self.interp_method)
+
+                if np.all(np.isnan(_var_obs_interp)):
+                    # remove date from list
+                    print(f"Warning: all interpolated values are NaN at date {date} for variable {self.name_var}, skipping this date.")
+                    print(self.date_obs[i], self.t_obs[i])
+                    self.date_obs.pop(i)
+                    self.t_obs = np.delete(self.t_obs, i)
+                    self.t_obs_jax = jnp.delete(self.t_obs_jax, i)
+                    self.varobs = np.delete(self.varobs, i, axis=0)
+                    self.errobs = np.delete(self.errobs, i, axis=0)
+
+                    continue
+
+                # Mask values outside obs range
                 var_obs_interp = _var_obs_interp.reshape(self.shape_grid)
                 err_obs_interp = _err_obs_interp.reshape(self.shape_grid)
-                
+                mask = (var_obs_interp<np.nanmin(var_obs)) | (var_obs_interp>np.nanmax(var_obs)) | (self.mask)
+                var_obs_interp[mask] = np.nan
+                err_obs_interp[mask] = np.nan
+
                 # Save operator if asked
                 if self.write_op:
                     with open(file_L4, "wb") as f:
                         pickle.dump((var_obs_interp,err_obs_interp), f)
 
-            if var_bc is not None and self.name_var in var_bc:
-                var_obs_interp -= var_bc[self.name_var][i].flatten()
-            
+                if var_bc is not None and self.name_var in var_bc:
+                    var_obs_interp -= var_bc[self.name_var][i].flatten()
+
             if self.gradients:
                     # Compute gradients
                 var_obs_interp_grady = np.zeros_like(var_obs_interp)*np.nan
@@ -1564,8 +1692,20 @@ class Obsop_interp_l4(Obsop_interp):
                 # Fill dictionnaries
                 self.varobs[i] = var_obs_interp.flatten()
                 self.errobs[i] = err_obs_interp.flatten()
-        
-        ### CORRECTING THE OBS ### 
+
+            if self.flag_plot>1:
+                lon_grid,lat_grid = self.coords_geo.T
+                fig,(ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15,5))
+                im1 = ax1.scatter(lon_obs,lat_obs,c=var_obs)
+                plt.colorbar(im1,ax=ax1)
+                im2 = ax2.pcolormesh(lon_grid.reshape(self.shape_grid),lat_grid.reshape(self.shape_grid), var_obs_interp)
+                plt.colorbar(im2,ax=ax2)
+                im3 = ax3.pcolormesh(lon_grid.reshape(self.shape_grid),lat_grid.reshape(self.shape_grid), err_obs_interp)
+                plt.colorbar(im3,ax=ax3)
+                fig.suptitle(date.strftime('%Y-%m-%d %H:%M'))
+                plt.show()
+
+        ### CORRECTING THE OBS ###
         if self.file_corr is not None:
             
             array_t_obs = np.zeros(self.t_obs.shape,dtype="datetime64[s]")
@@ -1613,8 +1753,11 @@ class Obsop_interp_l4(Obsop_interp):
         self.varobs_arr = jnp.array(self.varobs)
         self.errobs_arr = jnp.array(self.errobs)
 
+        mask = jnp.isnan(self.varobs_arr) | jnp.isnan(self.errobs_arr) | (self.errobs_arr<1e-7) | (self.varobs_arr>1e7)
+        self.varobs_arr = jnp.where(mask, 0., self.varobs_arr)
+        self.errobs_arr = jnp.where(mask, 1e15, self.errobs_arr)
 
-    
+
     def is_obs_time(self,t):
         """Check if t is in observation times."""
         return jnp.any(jnp.isclose(t, self.t_obs_jax))
@@ -1729,23 +1872,16 @@ class Obsop_interp_l4(Obsop_interp):
         # Get data at time t
         idt = jnp.where(self.t_obs_jax==t, size=1)[0]
         inverr = 1/self.errobs_arr[idt]
-        inverr = jnp.where(jnp.isnan(inverr), 0., inverr)
+        _advar = (inverr * misfit)
+        _advar = jnp.where(jnp.isnan(_advar), 0., _advar)
 
         # Read adjoint variable
         advar = adState.var[self.name_mod_var[self.name_var]]
-        #var = State.var[self.name_mod_var[self.name_var]]
-        advar += (inverr * misfit).reshape(advar.shape)
+        advar += _advar.reshape(advar.shape)
 
         # Update adjoint variable
-        adState.setvar(advar, self.name_mod_var[self.name_var])  
+        adState.setvar(advar, self.name_mod_var[self.name_var])
 
-        # Compute adjoint operation of y = Hx
-        #adX = self._misfit_reduced_jit(t, misfit.flatten() , var.flatten())
-        #adX = jnp.where(jnp.isnan(adX), 0., adX) 
-
-        # Update adjoint variable
-        #adState.setvar(advar + adX.reshape(advar.shape), self.name_mod_var[self.name_var])  
-  
     def _adj_grad(self, t, adState, State, misfit):
 
         for name in self.name_var_obs[t]:

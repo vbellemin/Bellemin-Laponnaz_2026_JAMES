@@ -311,6 +311,13 @@ class Model_diffusion(M):
             advar1[np.isnan(advar1)] = 0
             adState.setvar(advar1,self.name_var[name])
 
+    def save_output(self,State,present_date,name_var=None,t=None):
+
+        # Save only this model's own variables (e.g. the barotropic SSH), on a
+        # copy so the saved/masked field does not alter the running State.
+        State0 = State.copy()
+        State0.save_output(present_date, name_var=list(self.name_var.values()))
+
 class Model_diffusion_jax(Model_diffusion):
     def __init__(self,config,State):
         super().__init__(config,State)
@@ -555,6 +562,11 @@ class Model_qg1l_jax(M):
 
     
     def save_output(self,State,present_date,name_var=None,t=None):
+
+        # Save only this model's own variables (do not rely on a name_var passed
+        # from Model_multi, which is now None).
+        name_var = list(self.name_var.values())
+
         # Add geostrophic current to ageostrophic velocities
         if self.ageo_velocities:
             State0 = State.copy()
@@ -868,6 +880,12 @@ class Model_sw1l_jax(M):
     def __init__(self,config,State):
 
         super().__init__(config,State)
+
+        # The velocities are exported by this model's own save_output as the
+        # interpolated (T-point) fields u_*_interp / v_*_interp. Through the
+        # aggregated Model_multi write we therefore export only the SSH, to
+        # avoid also dumping the raw staggered U/V (mirrors MASSH_generation).
+        self.var_to_save = [self.name_var['SSH']]
 
         os.environ['XLA_PYTHON_CLIENT_PREALLOCATE'] = 'false'
 
@@ -1231,12 +1249,53 @@ class Model_sw1l_jax(M):
         ### - INITIALIZING SPECIFICATIONS - ###
         #######################################
 
-        # - Equivalent Height He background 
-        if config.MOD.He_data is not None and os.path.exists(config.MOD.He_data['path']):
-            ds = xr.open_dataset(config.MOD.He_data['path'])
-            self.Heb = ds[config.MOD.He_data['var']].values
+        # Phase celerity
+        if config.MOD.filec_aux is not None and os.path.exists(config.MOD.filec_aux):
+
+            ds = xr.open_dataset(config.MOD.filec_aux)
+            name_lon = config.MOD.name_var_c['lon']
+            lon = ds[name_lon]
+            # Convert longitude 
+            if np.sign(lon.data.min())==-1 and State.lon_unit=='0_360':
+                ds = ds.assign_coords({name_lon:((name_lon, lon.data % 360))})
+            elif np.sign(lon.data.min())>=0 and State.lon_unit=='-180_180':
+                ds = ds.assign_coords({name_lon:((name_lon, (lon.data + 180) % 360 - 180))})
+            ds = ds.sortby(name_lon)    
+
+            self.c = grid.interp2d(ds,
+                                   config.MOD.name_var_c,
+                                   State.lon,
+                                   State.lat)
+            
+            if config.MOD.cmin is not None:
+                self.c[self.c<config.MOD.cmin] = config.MOD.cmin
+                self.c[np.isnan(self.c)] = config.MOD.cmin
+            
+            if config.MOD.cmax is not None:
+                self.c[self.c>config.MOD.cmax] = config.MOD.cmax
+            
+            if config.EXP.flag_plot>0:
+                plt.figure()
+                plt.pcolormesh(self.c)
+                plt.colorbar()
+                plt.title('SW phase velocity c')
+                plt.show()
+                
         else:
-            self.Heb = config.MOD.He_init
+            self.c = config.MOD.c0 * np.ones((State.ny,State.nx))
+
+        if getattr(self, 'c', None) is not None: 
+
+            self.Heb = self.c**2 / self.g
+
+        else: 
+
+            # - Equivalent Height He background 
+            if config.MOD.He_data is not None and os.path.exists(config.MOD.He_data['path']):
+                ds = xr.open_dataset(config.MOD.He_data['path'])
+                self.Heb = ds[config.MOD.He_data['var']].values
+            else:
+                self.Heb = config.MOD.He_init
         
         # Height boundary condition hbc structure  
         if 'HBCX' in self.name_params and 'HBCY' in self.name_params :
@@ -1609,6 +1668,24 @@ class Model_sw1l_jax(M):
         for param in self.name_params :    
             State.params[self.name_params[param]] = params[self.slice_params[param]].reshape(self.shape_params[param])
 
+    def save_output(self,State,present_date,name_var=None,t=None):
+
+        name_var_to_save = [self.name_var['SSH'], 
+                            self.name_var['U']+'_interp', 
+                            self.name_var['V']+'_interp']
+        
+        u = +State.getvar(name_var=self.name_var['U'])[:,0:-1]
+        v = +State.getvar(name_var=self.name_var['V'])[0:-1,:]
+        u_to_save = np.zeros((State.ny,State.nx))
+        v_to_save = np.zeros((State.ny,State.nx))
+        u_to_save[:,1:-1] = (u[:,1:] + u[:,:-1]) * .5
+        v_to_save[1:-1,:] = (v[1:,:] + v[:-1,:]) * .5
+        State.var[self.name_var['U']+'_interp'] = u_to_save
+        State.var[self.name_var['V']+'_interp'] = v_to_save
+
+        State.save_output(present_date,
+                          name_var=name_var_to_save)
+
 ###############################################################################
 #                          Multi-models class                                 #
 ###############################################################################      
@@ -1701,8 +1778,15 @@ class Model_multi:
 
     def save_output(self,State,present_date,name_var=None,t=None):
 
+        # Each sub-model first writes (and merges) its own diagnostic variables
+        # into the timestamp file (e.g. the SW1L model writes its interpolated
+        # velocities u_*_interp / v_*_interp). We then append the aggregated
+        # total variables. Because State.save_output now merges instead of
+        # overwriting, no model clobbers another's variables.
         for M in self.Models:
-            M.save_output(State,present_date,name_var,t)
+            M.save_output(State,present_date)
+
+        State.save_output(present_date,name_var=self.var_to_save)
 
     def step(self,State,nstep=1,t=None):
 

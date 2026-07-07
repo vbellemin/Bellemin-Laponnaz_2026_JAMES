@@ -472,6 +472,16 @@ MOD_SW1L_JAX = dict(
 
     time_scheme = 'rk4', # Time scheme of the model (e.g. Euler,rk4)
 
+    c0 = 2.7, # If not None, fixed value for phase velocity 
+
+    filec_aux = None, # if c0==None, auxilliary file to be used as phase velocity field (the spatial interpolation is handled inline)
+
+    name_var_c = {'lon':'','lat':'','var':''}, # Variable names for the phase velocity auxilliary file 
+
+    cmin = None, # Minimum value of phase velocity to consider
+
+    cmax = None, # Maximum value of phase velocity to consider
+
     bc_kind = '1d', # Either 1d or 2d
 
     bc_island = "dirichlet", # Either "dirichlet" (orthogonal velocity forced to zero) or "radiative" (dissipative boundaries)
@@ -662,13 +672,13 @@ OBSOP_INTERP_L4 = dict(
 
     mask_borders = False,
 
-    interp_method = 'linear', # either 'nearest', 'linear', 'cubic' (use only 'cubic' when data is full of non-NaN)
+    interp_method = 'linear', # either 'nearest', 'linear', 'cubic' (use only 'cubic' when data is full of non-NaN), 'hybrid' (nearest->linear->cubic), 'block_mean' (nearest-cell averaging) or 'rtree' (RBF, requires pyinterp)
 
-    gradients = False, 
+    gradients = False,
 
     file_corr = None, # file of field to correct in the OBS, should be on the same grid as the mapping
 
-    name_var_corr = None, # name of the variable to correct and name in the netcdf file 
+    name_var_corr = None, # name of the variable to correct and name in the netcdf file
 
     name_coord_corr={"lon":"longitude","lat":"latitude","time":"time"}
 

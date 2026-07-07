@@ -408,16 +408,6 @@ class State:
             except Exception as e:
                 print(f"Failed to create directory: {e}")
 
-        # Delete the existing file if it exists
-        if os.path.exists(filename):
-            try:
-                os.remove(filename)
-                # print(f"Deleted existing file: {filename}")
-            except PermissionError as e:
-                print(f"Permission error when deleting the file: {e}")
-            except Exception as e:
-                print(f"Failed to delete the existing file: {e}")
-        
         coords = {}
         coords[self.name_time] = ((self.name_time), [pd.to_datetime(date)],)
 
@@ -450,17 +440,35 @@ class State:
                 var_to_save = var_to_save[np.newaxis,:,:]
             
             var[name] = (dims, var_to_save)
-            
-        ds = xr.Dataset(var, coords=coords)
-        ds.to_netcdf(filename,
-                     encoding={'time': {'units': 'days since 1900-01-01','dtype': 'float64'}},
-                     unlimited_dims={'time':True},
-                     mode="w") # forcing overwriting
-        
-        ds.close()
-        del ds
-        
-        return 
+
+        # Merge into the existing timestamp file if it already exists (so that
+        # the different models of a Model_multi each contribute their variables
+        # instead of overwriting one another), otherwise create it from scratch.
+        if os.path.exists(filename):
+            with xr.open_dataset(filename) as ds:
+                dsout = ds.load().copy()
+            # Add any coordinates not already present
+            for k, v in coords.items():
+                if k not in dsout.coords:
+                    dsout = dsout.assign_coords({k: v})
+            # Add / update the variables of this write
+            for name in var:
+                dsout[name] = (var[name][0], var[name][1])
+            dsout.to_netcdf(filename,
+                         unlimited_dims={'time':True},
+                         mode="w")
+            dsout.close()
+            del dsout
+        else:
+            ds = xr.Dataset(var, coords=coords)
+            ds.to_netcdf(filename,
+                         encoding={'time': {'units': 'days since 1900-01-01','dtype': 'float64'}},
+                         unlimited_dims={'time':True},
+                         mode="w")
+            ds.close()
+            del ds
+
+        return
 
     def save(self,filename=None):
         """
