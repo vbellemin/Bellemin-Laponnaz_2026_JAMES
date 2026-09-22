@@ -9,6 +9,7 @@ This repository contains the code used in:
 Bellemin-Laponnaz, V., Le Guillou, F., Ubelmann, C., Blayo, E., & Cosme, E. (2026). **A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations**. *Journal of Advances in Modeling Earth Systems*, 18, e2025MS005382.
 
 **DOI:** https://doi.org/10.1029/2025MS005382 
+
 **URL:** https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025MS005382
 
 ---
