@@ -162,9 +162,9 @@ The notebook [`fig01_osse_problem.ipynb`](./analysis/fig01_osse_problem.ipynb) i
 
 ## Citation
 
-If you use this repository, please cite: `Valentin Bellemin-Laponnaz, Florian Le Guillou, Ubelmann Clément, Blayo Eric, Cosme Emmanuel. A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations. ESS Open Archive. 2025.`
+If you use this repository, please cite: `Valentin Bellemin-Laponnaz, Florian Le Guillou, Ubelmann Clément, Blayo Eric, Cosme Emmanuel. A variational method for reconstructing and separating balanced motions and internal tides from wide-swath altimetric sea surface height observations. Journal of Advances in Modeling Earth Systems. 2026.`
  
-https://doi.org/10.22541/essoar.175455107.74338212/v1
+https://doi.org/10.1029/2025MS005382 
 
 ---
 
